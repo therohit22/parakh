@@ -2,7 +2,8 @@
 
 A company-wise technical interview preparation platform for practicing DSA questions and tracking interview preparation.
 
-[Live Demo](https://parakh-cbprulgxz-rohitkumar549nke-4272s-projects.vercel.app/)
+Live Demo: [Parakh](https://parakh-beige.vercel.app)
+GitHub Repository: [GitHub](https://github.com/therohit22/parakh)
 
 ---
 
