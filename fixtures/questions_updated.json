@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Two Sum (Classic Array Problem)",
+    "slug": "two-sum",
+    "description": "Updated description: Find indices of two numbers adding up to target in O(n) time.",
+    "difficulty": "Easy",
+    "topics": ["Array", "Hash Table", "Algorithms"],
+    "companies": ["google", "amazon"],
+    "leetcodeUrl": "https://leetcode.com/problems/two-sum/"
+  }
+]

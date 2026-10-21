@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Valid Question",
+    "slug": "valid-question",
+    "description": "Valid question description",
+    "difficulty": "Easy",
+    "topics": ["Math"],
+    "companies": ["google"]
+  },
+  {
+    "title": "Invalid Difficulty Question",
+    "slug": "invalid-diff-question",
+    "description": "Question with bad difficulty",
+    "difficulty": "Extreme",
+    "topics": ["Algorithms"],
+    "companies": ["google"]
+  }
+]

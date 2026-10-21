@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Two Sum",
+    "slug": "two-sum",
+    "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
+    "difficulty": "Easy",
+    "topics": ["Array", "Hash Table"],
+    "companies": ["google", "amazon"],
+    "leetcodeUrl": "https://leetcode.com/problems/two-sum/"
+  },
+  {
+    "title": "LRU Cache",
+    "slug": "lru-cache",
+    "description": "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.",
+    "difficulty": "Medium",
+    "topics": ["Hash Table", "Linked List", "Design", "Doubly-Linked List"],
+    "companies": ["google", "amazon", "microsoft"],
+    "leetcodeUrl": "https://leetcode.com/problems/lru-cache/"
+  },
+  {
+    "title": "Median of Two Sorted Arrays",
+    "slug": "median-of-two-sorted-arrays",
+    "description": "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.",
+    "difficulty": "Hard",
+    "topics": ["Array", "Binary Search", "Divide and Conquer"],
+    "companies": ["google", "microsoft"],
+    "leetcodeUrl": "https://leetcode.com/problems/median-of-two-sorted-arrays/"
+  }
+]

@@ -1,0 +1,9 @@
+name,slug,logo,description,website
+Google,google,/logos/google.svg,"Google LLC is an American multinational technology company, focusing on online advertising, search engine technology, cloud computing, computer software, and quantum computing.",https://about.google
+Amazon,amazon,/logos/amazon.svg,"Amazon.com, Inc. is an American multinational technology company focusing on e-commerce, cloud computing, online advertising, digital streaming, and artificial intelligence.",https://amazon.com
+Microsoft,microsoft,/logos/microsoft.svg,A multinational technology corporation producing computer software and electronics.,https://microsoft.com
+Netflix,netflix,/logos/netflix.svg,Entertainment streaming platform.,https://netflix.com
+Deloitte,deloitte,/logos/deloitte.svg,"Deloitte Touche Tohmatsu Limited is a leading global professional services network providing audit, consulting, financial advisory, risk management, and tax services.",https://www.deloitte.com
+Infosys,infosys,/logos/infosys.svg,"Infosys Limited is an Indian multinational information technology company that provides business consulting, information technology, and outsourcing services.",https://www.infosys.com
+Flipkart,flipkart,/logos/flipkart.svg,"Flipkart is a leading Indian e-commerce marketplace offering retail consumer products, logistics, and digital payment services.",https://www.flipkart.com
+Zomato,zomato,/logos/zomato.svg,"Zomato is an Indian multinational restaurant aggregator and food delivery company offering online ordering, table reservations, and restaurant discovery.",https://www.zomato.com

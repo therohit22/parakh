@@ -1,0 +1,5 @@
+name,slug,logo,description,website
+Netflix,netflix,https://example.com/netflix.png,Entertainment streaming platform.,https://netflix.com
+,bad-slug-missing-name,,,
+Meta,Invalid Slug With Spaces,https://example.com/meta.png,Social media company.,https://meta.com
+Apple,apple,,Technology giant.,not-a-valid-url

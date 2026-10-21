@@ -1,0 +1,18 @@
+[
+  {
+    "title": "First Instance of Question",
+    "slug": "duplicate-slug-test",
+    "description": "First instance",
+    "difficulty": "Easy",
+    "topics": ["Array"],
+    "companies": ["google"]
+  },
+  {
+    "title": "Second Instance of Same Question",
+    "slug": "duplicate-slug-test",
+    "description": "Second instance with same slug",
+    "difficulty": "Medium",
+    "topics": ["Hash Table"],
+    "companies": ["amazon"]
+  }
+]
