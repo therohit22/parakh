@@ -2,6 +2,8 @@
 
 A company-wise technical interview preparation platform designed to help computer science students prepare for technical assessments and engineering interviews systematically.
 
+**Live Website**: [Live Demo](https://parakh-cbprulgxz-rohitkumar549nke-4272s-projects.vercel.app/)
+
 ---
 
 ## Project Story

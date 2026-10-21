@@ -19,12 +19,15 @@ Helps students prepare for technical interviews through:
 - Solved status and progress tracking
 
 ## Current Stage
-**GitHub Repository Configured & Pushed to Remote (91/91 Tests Passing, Production Hardened)**
+**Deployed to Vercel with MongoDB Atlas Production Database (91/91 Tests Passing)**
 
-## GitHub Repository
-- **Remote Origin**: `https://github.com/therohit22/parakh.git`
-- **Branch**: `main`
-- **Push Status**: Successfully pushed and tracking `origin/main`
+## Production Infrastructure
+- **GitHub Repository**: `https://github.com/therohit22/parakh.git` (branch: `main`)
+- **MongoDB Atlas Cluster**: `ParakhCluster` (database: `parakh`)
+- **Atlas Network Access**: Configured (`0.0.0.0/0` for Vercel Serverless Functions)
+- **Deployment Platform**: Vercel (Live URL: `https://parakh-cbprulgxz-rohitkumar549nke-4272s-projects.vercel.app/`)
+
+
 
 ## Tech Stack
 | Layer | Technology |
@@ -833,6 +836,19 @@ Helps students prepare for technical interviews through:
   - Audited secrets: `.env.local` strictly untracked, zero credentials committed.
   - Successfully pushed `main` branch to remote (`git push -u origin main`).
   - Remote tracking confirmed (`origin/main`).
+
+## Completed (MongoDB Atlas Migration & Production Database Preparation)
+- **Database Architecture & Migration**:
+  - Maintained complete isolation between local development database (`127.0.0.1:27017/parakh`) and production MongoDB Atlas cluster (`ParakhCluster`/`parakh`).
+  - Audited local database: 9 companies and 115 unique verified interview questions.
+  - Verified idempotent bulk ingestion pipeline for Atlas deployment:
+    1. `npm run ingest -- fixtures/companies_valid.csv --type=companies` (9 companies with official vector SVG logos)
+    2. `npm run ingest -- fixtures/questions_apna_college.json --type=questions` (84 questions)
+    3. `npm run ingest -- fixtures/questions_expansion.json --type=questions` (86 questions, cross-company references merged via slug upserts)
+  - Zero duplicates guaranteed via Mongoose unique `slug` indexes and atomic upsert operations.
+  - User accounts and credentials excluded from migration to maintain clean production registration boundaries.
+  - Verified baseline automated quality gates: ESLint (0 errors, 0 warnings), TypeScript (0 errors), Vitest (91/91 tests passing), and Turbopack production build (40/40 routes).
+
 
 
 
