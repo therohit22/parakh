@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { dbConnect } from "@/lib/db";
 import User from "@/models/User";
+import { signToken, AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from "@/lib/auth";
 import { registerSchema } from "@/lib/validations/auth";
 import { validateCsrfOrigin } from "@/lib/security";
 
@@ -61,7 +62,13 @@ export async function POST(request: Request) {
       role: "student",
     });
 
-    return NextResponse.json(
+    // Sign JWT token
+    const token = signToken({
+      userId: user._id.toString(),
+      role: user.role,
+    });
+
+    const response = NextResponse.json(
       {
         ok: true,
         user: {
@@ -73,6 +80,11 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
+
+    // Set JWT in httpOnly cookie
+    response.cookies.set(AUTH_COOKIE_NAME, token, AUTH_COOKIE_OPTIONS);
+
+    return response;
   } catch (error) {
     if (error instanceof Error) {
       console.error(`[Auth Register] ${error.name}: ${error.message}`);

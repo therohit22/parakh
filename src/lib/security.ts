@@ -20,6 +20,7 @@ export function validateCsrfOrigin(request: Request): CsrfCheckResult {
   }
 
   const hostHeader = request.headers.get("host");
+  const forwardedHost = request.headers.get("x-forwarded-host");
   const originHeader = request.headers.get("origin");
   const refererHeader = request.headers.get("referer");
 
@@ -28,12 +29,23 @@ export function validateCsrfOrigin(request: Request): CsrfCheckResult {
     return { valid: true };
   }
 
+  const allowedHosts: string[] = [];
+  if (hostHeader) allowedHosts.push(hostHeader.toLowerCase());
+  if (forwardedHost) allowedHosts.push(forwardedHost.toLowerCase());
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    try {
+      allowedHosts.push(new URL(process.env.NEXT_PUBLIC_APP_URL).host.toLowerCase());
+    } catch {
+      // Ignore invalid URL
+    }
+  }
+
   if (originHeader) {
     try {
       const originUrl = new URL(originHeader);
-      const originHost = originUrl.host;
+      const originHost = originUrl.host.toLowerCase();
 
-      if (hostHeader && originHost.toLowerCase() === hostHeader.toLowerCase()) {
+      if (allowedHosts.includes(originHost)) {
         return { valid: true };
       }
 
@@ -50,9 +62,9 @@ export function validateCsrfOrigin(request: Request): CsrfCheckResult {
   } else if (refererHeader) {
     try {
       const refererUrl = new URL(refererHeader);
-      const refererHost = refererUrl.host;
+      const refererHost = refererUrl.host.toLowerCase();
 
-      if (hostHeader && refererHost.toLowerCase() === hostHeader.toLowerCase()) {
+      if (allowedHosts.includes(refererHost)) {
         return { valid: true };
       }
 

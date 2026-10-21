@@ -35,21 +35,9 @@ export default function RegisterForm() {
         return;
       }
 
-      // Automatically log the user in or redirect to login
-      const loginRes = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (loginRes.ok) {
-        router.push("/dashboard");
-        router.refresh();
-      } else {
-        router.push("/login");
-      }
+      // Registration sets the httpOnly session cookie directly
+      router.push("/dashboard");
+      router.refresh();
     } catch {
       setError("An unexpected network error occurred. Please try again.");
     } finally {
