@@ -1,150 +1,110 @@
 # Parakh
 
-A company-wise technical interview preparation platform for practicing DSA questions and tracking interview preparation.
+A company-wise technical interview preparation platform that helps students practice DSA questions asked by specific companies.
 
-Live Demo: [Parakh](https://parakh-beige.vercel.app)
-GitHub Repository: [GitHub](https://github.com/therohit22/parakh)
-
----
-
-## Overview
-
-During campus placements and technical job searches, computer science students often face fragmented interview preparation. Practice problems asked by specific hiring companies are typically scattered across discussion forums, spreadsheets, and community threads without centralized tracking.
-
-**Parakh** solves this problem by providing a structured, company-wise and topic-wise preparation platform. Students can practice coding interview questions targeted to specific employers, filter problems by algorithmic topic and difficulty level, track solved questions, and monitor their preparation readiness through a dedicated dashboard.
+Live Demo: [https://parakh-beige.vercel.app/](https://parakh-beige.vercel.app/)  
+GitHub: [https://github.com/therohit22/parakh](https://github.com/therohit22/parakh)
 
 ---
 
-## Features
+## Why I Built Parakh
 
-- **Company-wise Question Preparation**: Practice DSA questions organized by target hiring companies (e.g., Google, Amazon, Microsoft, Flipkart).
-- **Topic and Difficulty Filtering**: Filter questions by core computer science topics (Arrays, Strings, Trees, Dynamic Programming, Graphs) and difficulty levels (Easy, Medium, Hard).
-- **Search**: Search questions and companies by title, topic, or keyword with server-side query sanitization.
-- **Bookmarks**: Save important or challenging questions to a personal bookmarks list for quick access.
-- **Solved-Question Tracking**: Mark completed problems as solved to record progress across topics and companies.
-- **Preparation Dashboard**: View completion rates, difficulty distributions, and company readiness metrics.
-- **LeetCode Practice Links**: Direct links to official LeetCode problems for immediate hands-on coding practice.
-- **User Authentication**: Student registration and sign-in with secure session management.
-- **Admin Management**: Dedicated administrator portal to create, update, and manage company and question catalogs.
-- **Progress Tracking**: Track solved counts, recent practice activity, and review items.
+When preparing for campus placements and technical internships, I noticed that practice questions were scattered everywhere—in random Google Sheets, Telegram groups, LeetCode discussion posts, and discussion forums. 
+
+It was frustrating to figure out which Data Structures & Algorithms problems were actually asked by specific companies like Google, Amazon, Microsoft, or Flipkart, and there was no clean way to track what I had already practiced for each company.
+
+I built **Parakh** to solve this problem for myself and other students by organizing interview questions company-wise and topic-wise in one place. It lets you browse target companies, filter problems by algorithmic topic and difficulty, solve them directly on LeetCode, and track your preparation progress on a personal dashboard.
+
+*(Note: Parakh helps organize your practice; it does not guarantee specific interview questions or placement outcomes.)*
 
 ---
 
-## What I Built
+## What Parakh Does
 
-- **Full-Stack Next.js Application**: Built using Next.js App Router with server-rendered pages and API route handlers for co-located frontend and backend functionality.
-- **MongoDB & Mongoose Data Layer**: Designed schemas for users, companies, and questions, with connection pooling cached on `globalThis` to prevent connection leaks during serverless execution.
-- **Stateless Cookie Authentication**: Implemented authentication using JSON Web Tokens (JWT) stored in `httpOnly`, `SameSite=Lax` cookies with password hashing via bcryptjs.
-- **Boundary Validation**: Validated request bodies, query parameters, and URL slugs using Zod schemas to reject invalid or malformed data before database execution.
-- **Server-Side Authorization**: Enforced role-based access control (`student` vs. `admin`) strictly on the server by decoding verified JWT claims.
-- **Idempotent Data Ingestion**: Built a standalone CLI tool to import company and question datasets from CSV and JSON files using slug-based upserts to prevent duplicate records.
-- **Automated Testing**: Wrote automated unit and integration tests with Vitest covering validation, authentication, route logic, and data ingestion.
+- **Company-wise Question Browsing**: Explore coding questions categorized by target hiring companies (e.g., Google, Amazon, Microsoft, Flipkart, Deloitte, Infosys, Zomato).
+- **Search & Multi-Filter**: Search questions and companies by keyword, and filter questions by difficulty (`Easy`, `Medium`, `Hard`) and DSA topics (Arrays, Strings, Trees, Dynamic Programming, Graphs).
+- **Direct LeetCode Practice Links**: Each question links directly to its official LeetCode problem page so students can write and submit code immediately.
+- **Bookmarks**: Save difficult or frequently asked problems to a personal bookmark list for quick revision.
+- **Solved-Question Tracking**: Mark completed problems as solved to maintain an accurate record of your progress.
+- **Student Dashboard**: Track preparation readiness with solved vs. total counts, difficulty breakdowns, and company-specific completion progress.
+- **Authentication**: Student registration and login with secure session management.
+- **Admin Management**: Dedicated administrator portal to add and update companies and questions with referential integrity checks.
+- **Data Ingestion**: Standalone CLI script to validate and import companies and questions from CSV and JSON datasets.
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| **Framework** | Next.js (App Router) |
-| **Language** | TypeScript |
-| **UI** | React, Tailwind CSS |
-| **Database** | MongoDB Atlas, Mongoose |
-| **Authentication** | JWT (`jsonwebtoken`), `bcryptjs` |
-| **Validation** | Zod |
-| **Testing** | Vitest |
-| **Deployment** | Vercel |
+- **Frontend & Backend**: Next.js (App Router), React, TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: MongoDB Atlas with Mongoose
+- **Validation**: Zod
+- **Authentication**: JWT (`jsonwebtoken`) in `httpOnly` cookies, password hashing with `bcryptjs`
+- **Testing**: Vitest
+- **Deployment**: Vercel
 
 ---
 
-## Architecture
+## How It Works
+
+At a high level, the application follows a straightforward full-stack flow:
 
 ```text
-Browser → Next.js App Router / API Route Handlers → Mongoose → MongoDB Atlas
+User (Browser)
+   ↓
+Next.js App Router (Pages & UI Components)
+   ↓
+API Route Handlers (`/api/...`)
+   ↓
+Authentication Check (JWT in httpOnly cookie) & Zod Validation
+   ↓
+Mongoose Models (User, Company, Question, Bookmark, Progress)
+   ↓
+MongoDB Atlas
 ```
 
-Parakh uses a monolithic full-stack architecture where Next.js App Router handles page rendering and RESTful route handlers. Client requests pass through server-side JWT verification and Zod schema validation before executing database queries. Mongoose manages interactions with MongoDB Atlas using a cached connection pool optimized for serverless execution.
+1. **Browsing**: The frontend requests data from Next.js Route Handlers. Public endpoints return company lists and question catalogs populated with company metadata.
+2. **Filtering & Search**: Keyword searches and filters (difficulty, topic, company) are executed directly in MongoDB queries with bounded pagination (`limit` capped at 50) rather than filtering in Node.js memory.
+3. **Tracking Progress**: When an authenticated student bookmarks or solves a problem, the server updates their record in MongoDB using atomic operators (`$addToSet` and `$pull`), ensuring state persists across sessions.
+4. **Dashboard**: The dashboard aggregates question counts and the user's solved questions across difficulties and target companies to display live progress bars.
 
 ---
 
-## Getting Started
+## Some Technical Decisions I Made
 
-### Prerequisites
+Here are a few practical engineering decisions I made while building Parakh:
 
-- **Node.js**: `v20.x` or higher
-- **MongoDB**: Access to a MongoDB Atlas cluster or a local MongoDB instance (`mongodb://127.0.0.1:27017/parakh`)
+### 1. Storing JWT in an httpOnly Cookie Instead of localStorage
+Instead of keeping the authentication token in browser `localStorage` where any third-party script or XSS vulnerability could read it, I store the signed JWT in an `httpOnly`, `SameSite=Lax` cookie (`secure: true` in production). This ensures JavaScript running in the browser cannot access the session token directly.
 
-### Installation
+### 2. Password Hashing with bcryptjs
+User passwords are never stored in plain text. During registration, passwords are hashed using `bcryptjs` with 10 salt rounds before saving to MongoDB. In the Mongoose schema, the password field is marked with `select: false` so that query results do not accidentally leak password hashes into API responses.
 
-Clone the repository and install dependencies:
+### 3. Boundary Validation with Zod
+I used Zod schemas to validate all incoming inputs—request bodies for login and question creation, query parameters for search and pagination (`page >= 1`, `1 <= limit <= 50`), and dynamic URL slugs. This catches invalid data, malformed payloads, and unexpected types before they reach database logic.
 
-```bash
-git clone https://github.com/therohit22/parakh.git
-cd parakh
-npm install
-```
+### 4. Server-Side Role-Based Authorization
+The admin panel lets administrators add or edit companies and questions. Rather than relying on frontend flags or trusting user input, authorization is verified entirely on the server (`requireAdmin`). The helper decodes the signed JWT from the cookie and strictly checks `role === "admin"`. If a regular student tries to access admin mutation routes, the server immediately returns `403 Forbidden`.
 
-### Environment Variables
+### 5. Cached MongoDB Connection on `globalThis`
+In Next.js development (with Hot Module Replacement) and serverless environments, each module re-evaluation can open a new database connection, quickly exhausting MongoDB Atlas connection limits. I implemented a cached connection utility in `src/lib/db.ts` that attaches the Mongoose connection promise to `globalThis`, reusing the single pool across requests.
 
-Create a local environment file by copying the template:
-
-```bash
-cp .env.example .env.local
-```
-
-Configure the following variables in `.env.local`:
-
-```env
-# MongoDB connection URI (Atlas or local instance)
-MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/parakh?retryWrites=true&w=majority
-
-# Secret key for signing authentication JWT cookies (32+ characters)
-JWT_SECRET=your-random-jwt-secret-key-at-least-32-chars
-```
-
-> Refer to `.env.example` as the source of truth for environment variable configuration.
-
-### Run Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Build
-
-Create an optimized production build:
-
-```bash
-npm run build
-```
-
-### Test
-
-Run the automated test suite:
-
-```bash
-npm test
-```
-
----
-
-## Security
-
-- **Password Hashing**: User passwords are safe and hashed with `bcryptjs` (salt rounds: 10) before database storage.
-- **HttpOnly Cookies**: Session tokens are stored in `httpOnly`, `SameSite=Lax` cookies (`secure: true` in production) to mitigate XSS token theft.
-- **Server-Side Authorization**: Protected endpoints verify authentication status and user roles on the server rather than trusting client state.
-- **Input Validation**: All request bodies, query parameters, and URL slugs are validated using strict Zod schemas.
-- **CSRF Protection**: Origin and referer headers are validated for state-changing HTTP requests.
-- **Query Sanitization**: Search inputs are sanitized to protect against NoSQL regex injection.
-- **Secret Isolation**: Database credentials and JWT secrets are kept in environment variables and never exposed to client-side code.
+### 6. Atomic Operations for Bookmarks and Solved Status
+To track bookmarks and solved status, I used MongoDB's `$addToSet` and `$pull` operators. Using `$addToSet` makes the solve and bookmark actions idempotent—clicking "Mark Solved" multiple times or experiencing a network retry will never create duplicate entries for the same problem.
 
 ---
 
 ## Data Ingestion
 
-Parakh includes a standalone, idempotent CLI tool for importing companies and questions from CSV and JSON files into MongoDB:
+To populate the platform with realistic interview questions, I built a standalone CLI ingestion tool (`scripts/ingest/`):
+
+- **Data Formats**: Supports importing from RFC 4180-compliant CSV files or structured JSON arrays.
+- **Schema Validation**: Every row or object is validated against Zod schemas (`companySchema` or `questionSchema`) before insertion.
+- **Company Slug Resolution**: Questions reference companies by human-readable slugs (e.g., `google`, `amazon`). The importer resolves these slugs to existing MongoDB `_id`s in memory. If a company does not exist in the database, the question fails with a clear diagnostic error, preventing broken foreign references.
+- **Idempotent Upserts**: The ingestion script uses `slug` as the unique key. If a record already exists, its fields are updated in-place; if not, a new document is inserted. Running the script multiple times produces zero duplicate records.
+- **Dry-Run Mode**: Running with `--dry-run` performs full parsing, validation, and slug resolution, printing a summary report without writing anything to MongoDB.
+
+Example commands:
 
 ```bash
 # Ingest companies from CSV
@@ -153,34 +113,129 @@ npm run ingest -- fixtures/companies_valid.csv --type=companies
 # Ingest questions from JSON
 npm run ingest -- fixtures/questions_apna_college.json --type=questions
 
-# Run in dry-run mode (validates without writing to database)
+# Validate without writing to the database
 npm run ingest -- fixtures/companies_valid.csv --type=companies --dry-run
 ```
 
-Records are matched by unique `slug` identifiers, updating existing entries in place without generating duplicates.
+---
+
+## Testing
+
+Vitest is used for automated API, validation, security, and utility testing. 
+
+The test suite covers:
+- Input validation (registration, login, query pagination limits, search regex escaping)
+- Authentication and token lifecycle (signing, verification, expiration, role checks)
+- Security & authorization (CSRF origin checks, admin RBAC rejection for students)
+- Data ingestion (CSV parsing, quoted fields, duplicate slug detection)
+- Company-wise question filtering and non-duplication
+
+The project currently has **91 passing tests across 7 test suites**.
+
+To run tests:
+
+```bash
+npm test
+```
 
 ---
 
-## Admin Management
+## Local Setup
 
-Platform administrators (`role: "admin"`) have access to dedicated management interfaces:
+### Prerequisites
+- Node.js (v20 or higher recommended)
+- MongoDB instance (local or MongoDB Atlas)
 
-- **Company Management**: Create, update, and manage company profiles and logos.
-- **Question Management**: Create, update, and categorize interview questions with associated companies.
-- **Referential Integrity**: Company deletion guards prevent deleting employers that have active associated questions.
+### Steps
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/therohit22/parakh.git
+   cd parakh
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables:**
+   Copy the example environment file:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Add your MongoDB connection string and a secret key:
+   ```env
+   MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/parakh?retryWrites=true&w=majority
+   JWT_SECRET=your-random-jwt-secret-key-at-least-32-chars
+   ```
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+5. **(Optional) Ingest initial dataset:**
+   ```bash
+   npm run ingest -- fixtures/companies_valid.csv --type=companies
+   npm run ingest -- fixtures/questions_apna_college.json --type=questions
+   ```
 
 ---
 
-## Known Limitations
+## Environment Variables
 
-- **OAuth Authentication**: Third-party OAuth (Google, GitHub) is not implemented; authentication is email and password based.
-- **Email Verification & Password Reset**: Automated email verification and password reset workflows are not currently implemented.
+| Variable | Description |
+|---|---|
+| `MONGODB_URI` | MongoDB Atlas or local connection string |
+| `JWT_SECRET` | Secret key used to sign and verify authentication JWT cookies (at least 32 characters) |
+
+> Keep secrets out of version control. The `.env.local` file is excluded in `.gitignore`.
 
 ---
 
-## Future Improvements
+## Project Structure
 
-- Automated email notifications and practice reminders.
-- Company-specific interview experience notes and round breakdowns.
-- Expanded question coverage for additional hiring companies.
-- Advanced preparation analytics and topic mastery insights.
+```text
+parakh/
+├── src/
+│   ├── app/            # Next.js App Router (pages and API route handlers)
+│   ├── components/     # React components (auth, companies, questions, dashboard, admin)
+│   ├── lib/            # Server utilities (db connection, auth helpers, Zod validation schemas)
+│   └── models/         # Mongoose models (User, Company, Question, Bookmark, Progress, QuestionNote)
+├── scripts/
+│   └── ingest/         # Standalone CLI ingestion pipeline (CSV parser, importer, CLI runner)
+├── fixtures/           # Sample CSV and JSON datasets for companies and questions
+├── tests/              # Vitest test suites (auth, validation, security, filtering, ingestion)
+└── public/             # Static assets and official company brand vector logos
+```
+
+---
+
+## What I Learned
+
+Building Parakh helped me gain hands-on experience across the entire web stack:
+- **Designing APIs around real UI needs**: I learned to structure REST Route Handlers to return exactly what the frontend requires (such as pre-aggregating solved counts) to avoid N+1 network requests from client components.
+- **Handling authentication with cookies**: Understanding how to properly configure `httpOnly`, `SameSite=Lax`, and `secure` cookies helped me appreciate how real session management works beyond simply tossing tokens into `localStorage`.
+- **Database modeling & connection lifecycle**: Managing Mongoose connections across serverless functions taught me why connection caching is critical to prevent socket leaks.
+- **Data sanitization & validation**: Using Zod at every endpoint and escaping search regex input showed me how to protect backend queries from malformed payloads and ReDoS attacks.
+- **Building idempotent scripts**: Designing the ingestion tool taught me the importance of unique slugs and upsert operations so data pipelines can be safely re-run without creating mess or duplicates.
+- **Writing maintainable tests**: Setting up Vitest to test boundary conditions, token expiration, and authorization helped catch subtle bugs before deployment.
+
+---
+
+## Limitations / Future Improvements
+
+- **No Third-Party OAuth**: The app currently uses email and password authentication. Adding Google or GitHub OAuth would make sign-in faster for students.
+- **No Automated Password Reset**: Password resets via email are not yet implemented; accounts currently support password changes while logged in.
+- **Regex-Based Search**: Search currently uses case-insensitive MongoDB `$regex` matching. For datasets with tens of thousands of questions, integrating an inverted index or a dedicated search tool (like Typesense or Elasticsearch) would be more efficient.
+- **External Coding Practice**: Parakh links out to official LeetCode problems rather than running code inside an embedded browser sandbox. Adding an integrated code editor and test-case runner is a natural next step.
+
+---
+
+## Author
+
+**Rohit Kumar**  
+SRM Institute of Science and Technology, Delhi-NCR  
+GitHub: [https://github.com/therohit22](https://github.com/therohit22)
